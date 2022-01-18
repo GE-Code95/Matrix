@@ -1,59 +1,45 @@
-import json
-
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 import time
-
-'''
-1. Find elements for each section
-2. Enter article
-3. Extract data
-'''
-# ID, Name, Class
-
 
 PATH = "C:/Program Files (x86)/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 url = 'https://www.bbc.com/'
 
 driver.get(url)
-
-'''
-elems = driver.find_elements_by_class_name("media__link")
-for elem in elems:
-    print(elem.get_attribute("href"))
-'''
-
-media_dict = {}
-
-media_list = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.TAG_NAME, "section"))
-)
+actions = ActionChains(driver)
 
 
+# Getting all sections from BBC
+WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a.block-link__overlay-link")))
+time.sleep(1)
+media_list = driver.find_elements_by_css_selector("a.block-link__overlay-link")
+for idx, val in enumerate(media_list):
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a.block-link__overlay-link")))
+    time.sleep(1)
+    media_list = driver.find_elements_by_css_selector("a.block-link__overlay-link")
+    item = media_list[idx]
+    actions.move_to_element(item).perform()
+    time.sleep(0.5)
+    item.click()
+    #scrape your data
+    driver.execute_script("window.history.go(-1)")
 
-print(type(media_list))
-
-print(media_dict)
 driver.close()
 driver.quit()
 
 
+class Base(webdriver.Chrome):
+    path = r"C:/Program Files (x86)/chromedriver.exe"
 
-'''
-class Base:
-    def __init__(self, driver):
-        self.driver = driver
+    def __init__(self, driver_path=f"{path}"):
+        self.drive_path = driver_path
+        super(Base, self).__init__()
 
-    def download(self, by_locator):
-        elements = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.XPATH, by_locator)))
-        print(type(elements))
-
-    def close(self, driver):
-        driver.quit()
-'''
+    def access_page(self, url):
+        self.get(url)
 
 
