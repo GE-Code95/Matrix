@@ -33,18 +33,23 @@ print(header.text)'''
 def previous():
     driver.execute_script("window.history.go(-1)")
 
-problems = 0
+content = ""
 for idx, url in enumerate(bbc_hrefs):
     driver.get(url)
     try:
         header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "main-heading")))
+        data_block = WebDriverWait(driver, 10).until(
+            EC.presence_of_all_elements_located((By.XPATH, "//div[@data-component='text-block']")))
+        for block in data_block:
+            print(block.text)
+
         content_dict[idx] = header.text
+        print(content)
         previous()
+
     except:  # Handle different title html
-        print(problems + 1)
-
-
-
+        print(url)
+        pass
 
     print(content_dict)
 
