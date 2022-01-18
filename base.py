@@ -30,16 +30,23 @@ header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID
 print(header.text)'''
 
 
+def previous():
+    driver.execute_script("window.history.go(-1)")
+
+problems = 0
 for idx, url in enumerate(bbc_hrefs):
     driver.get(url)
     try:
         header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "main-heading")))
         content_dict[idx] = header.text
-        driver.execute_script("window.history.go(-1)")
-    except:
-        pass
-    print(content_dict)
+        previous()
+    except:  # Handle different title html
+        print(problems + 1)
 
+
+
+
+    print(content_dict)
 
 '''for idx, val in enumerate(media_list):
     #WebDriverWait(driver, 2).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a.block-link__overlay-link")))
@@ -57,6 +64,8 @@ driver.close()
 driver.quit()
 
 '''class Base(webdriver.Chrome):
+    
+    # Add previous
 
     def __init__(self, driver_path="C:/Program Files (x86)/chromedriver.exe", teardown=False):
         self.teardown = teardown
