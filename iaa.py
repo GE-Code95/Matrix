@@ -12,7 +12,6 @@ driver.maximize_window()
 url = 'https://www.iaa.gov.il/en/airports/ben-gurion/flight-board/'
 
 driver.get(url)
-row_lists = []
 
 # Get the table headers
 table_headers = WebDriverWait(driver, 10).until(
@@ -24,9 +23,10 @@ columns = list(map(lambda name: name.text, table_headers))
 table = WebDriverWait(driver, 10).until(
     EC.visibility_of_element_located((By.XPATH, "//*[@id=\"flight_board-arrivel_table\"]")))
 
-for row in table.find_elements_by_css_selector('tr'):
-    for cell in row.find_elements_by_tag_name('td'):
-        print(cell.text)
+list_to_break = [cell.text for row in table.find_elements_by_css_selector('tr') for cell in
+                 row.find_elements_by_tag_name('td')]
+
+
 
 data_table = pd.DataFrame(columns=columns)
 print(data_table)
