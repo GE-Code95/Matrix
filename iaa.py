@@ -21,16 +21,23 @@ table_headers = WebDriverWait(driver, 10).until(
 # Put headers names into a list
 columns = list(map(lambda name: name.text, table_headers))
 
+# Get the table rows
 table = WebDriverWait(driver, 10).until(
     EC.visibility_of_element_located((By.XPATH, "//*[@id=\"flight_board-arrivel_table\"]")))
 
+# Put the rows into a list
 list_to_break = [cell.text for row in table.find_elements_by_css_selector('tr') for cell in
                  row.find_elements_by_tag_name('td')]
 
+# Break the list into a nested list - each list is a row
 result = [list(v) for k, v in itertools.groupby(list_to_break, key=lambda sep: sep == "") if not k]
 
+# Insert into Pandas Dataframe.
 df_flights = pd.DataFrame(result, columns=columns)
-print(df_flights)
+
+# Convert table to json.
+flights_json = df_flights.to_json()
+
 
 driver.close()
 driver.quit()
