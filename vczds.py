@@ -18,24 +18,9 @@ url = 'https://www.iaa.gov.il/en/airports/ben-gurion/flight-board/'
 
 driver.get(url)
 
-# Get the table headers
-table_headers = WebDriverWait(driver, 10).until(
-    EC.visibility_of_any_elements_located((By.XPATH, "//table[@id='flight_board-arrivel_table']//thead//tr//th")))
-
-# Put headers names into a list
-columns = list(map(lambda name: name.text, table_headers))
-
 table = WebDriverWait(driver, 10).until(
     EC.visibility_of_element_located((By.XPATH, "//*[@id=\"flight_board-arrivel_table\"]")))
 
 for row in table.find_elements_by_css_selector('tr'):
     for cell in row.find_elements_by_tag_name('td'):
         print(cell.text)
-
-
-driver.close()
-driver.quit()
-
-a = []
-
-

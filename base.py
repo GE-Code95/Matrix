@@ -75,7 +75,7 @@ for idx, url in enumerate(bbc_hrefs):
 driver.close()
 driver.quit()
 
-'''class Base(webdriver.Chrome):
+class Base(webdriver.Chrome):
     
     # Add previous
 
@@ -93,6 +93,4 @@ driver.quit()
             self.quit()
 
 
-if __name__ == '__main__':
-    base = Base()
-    base.access_page(url)'''
+
