@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pandas as pd
+import itertools
 
 # TODO - Keep table updated
 
@@ -26,10 +27,10 @@ table = WebDriverWait(driver, 10).until(
 list_to_break = [cell.text for row in table.find_elements_by_css_selector('tr') for cell in
                  row.find_elements_by_tag_name('td')]
 
+result = [list(v) for k, v in itertools.groupby(list_to_break, key=lambda sep: sep == "") if not k]
 
-
-data_table = pd.DataFrame(columns=columns)
-print(data_table)
+df_flights = pd.DataFrame(result, columns=columns)
+print(df_flights)
 
 driver.close()
 driver.quit()
