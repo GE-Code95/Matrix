@@ -2,14 +2,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 import pandas as pd
 import itertools
+import schedule
 
 # TODO - Keep table updated
-
-PATH = "C:/Program Files (x86)/chromedriver.exe"
-driver = webdriver.Chrome(PATH)
-driver.maximize_window()
+options = Options()
+options.headless = True
+options.binary_location = "C:/Program Files/Mozilla Firefox/firefox.exe"
+PATH = "C:/Program Files (x86)/geckodriver.exe"
+driver = webdriver.Firefox(executable_path=PATH, firefox_options=options)
 url = 'https://www.iaa.gov.il/en/airports/ben-gurion/flight-board/'
 
 driver.get(url)
@@ -20,6 +23,15 @@ table_headers = WebDriverWait(driver, 10).until(
 
 # Put headers names into a list
 columns = list(map(lambda name: name.text, table_headers))
+
+
+'''while True:
+    try:
+        item = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH, "//button[@id='next']")))
+        driver.execute_script("arguments[0].click();", item)
+
+    except Exception:break'''
+
 
 # Get the table rows
 table = WebDriverWait(driver, 10).until(
@@ -38,6 +50,7 @@ df_flights = pd.DataFrame(result, columns=columns)
 # Convert table to json.
 flights_json = df_flights.to_json()
 
+print(flights_json)
 
 driver.close()
 driver.quit()
