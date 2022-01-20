@@ -1,30 +1,25 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
+from transformers import pipeline
 
+text = '''
+It’s hard to top a kick in the nuts.
 
-options = Options()
-options.headless = True
-options.binary_location = "C:/Program Files/Mozilla Firefox/firefox.exe"
-PATH = "C:/Program Files (x86)/geckodriver.exe"
-driver = webdriver.Firefox(executable_path=PATH, firefox_options=options)
-url = 'https://www.bbc.com/worklife/article/20220119-is-having-a-favourite-child-really-a-bad-thing'
+Especially when the kicker is Linda McMahon, the Connecticut Republican candidate for the U.S. Senate. Pure comedy gold.
 
-driver.get(url)
+Jon Stewart watches the tape and doubles over with laughter. He and fifteen of The Daily Show’s writers, producers, and performers are gathered around a 40-inch flat-screen TV inside the show’s Eleventh Avenue offices early on a Thursday morning in August. Creating a segment for tonight’s Daily Show around this footage, from one of World Wrestling Entertainment’s harmless little skits, would seem to be easy. Maybe they can just run the nut shot repeatedly. Along with another clip of McMahon, the co-founder and former CEO of WWE, chugging a beer and drooling foam down her cheek.
 
-header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-    (By.XPATH, "//div[@tabindex='-1']")))
+Except that the goal here isn’t simply topping the kick in the nuts—it’s using the scrotum slam in the service of a larger point. Oh, Stewart & Co. enjoy a lowbrow laugh as much as the folks over at South Park; heck, next week they’re publishing a book that includes some excellent masturbation jokes. But Stewart and The Daily Show became America’s sharpest political satirists by aiming at least a little bit higher.
 
-intro = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-    (By.XPATH, "//div[@class='article__intro b-font-family-serif']")))
+“Slut! Slut! Slut!” The next clip shows McMahon’s daughter entering the wrestling ring to a booming chant from the crowd. Followed by McMahon’s deadly serious face, in a Nightline interview. “Oh my God,” Stewart interjects. “How do you answer that as a politician? ‘Well, you don’t know my daughter’? Or, ‘You know, the use of the term slut was obviously inadvertent’?”
 
-body = WebDriverWait(driver, 10).until(EC.visibility_of_any_elements_located((By.XPATH, "//div/div/p")))
+This sets off a spasm of free-associative jokes from the other writers. “Or, ‘You don’t understand—Americans love this shit.’ ”
 
-print(header.text)
-print(intro.text)
+“What if we ran the clip like Super Mario Brothers, and every time she kicks that guy in the nuts, a gold coin comes out?”
 
-for p in body:
-    print(p.text)
+“Was McMahon endorsed by Triple H? Or was it Triple X?”
+'''
 
+summarizer = pipeline('summarization')
+
+summarizer(text, max_length=100, min_length=30, do_sample=False)
+
+print(summarizer)
