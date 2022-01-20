@@ -5,14 +5,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 import pandas as pd
 import itertools
-import schedule
 
-# TODO - Keep table updated
+
+# TODO - Keep table updated and click show more | Save | Search
+
 options = Options()
 options.headless = True
 options.binary_location = "C:/Program Files/Mozilla Firefox/firefox.exe"
 PATH = "C:/Program Files (x86)/geckodriver.exe"
-driver = webdriver.Firefox(executable_path=PATH, firefox_options=options)
+driver = webdriver.Firefox(executable_path=PATH, options=options)
+driver.maximize_window()
 url = 'https://www.iaa.gov.il/en/airports/ben-gurion/flight-board/'
 
 driver.get(url)

@@ -5,16 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.options import Options
 import time
-import nltk
 
-nltk.download()
-
-counter = 0
 options = Options()
 options.headless = True
 options.binary_location = "C:/Program Files/Mozilla Firefox/firefox.exe"
 PATH = "C:/Program Files (x86)/geckodriver.exe"
-driver = webdriver.Firefox(executable_path=PATH, firefox_options=options)
+driver = webdriver.Firefox(executable_path=PATH, options=options)
+driver.maximize_window()
 url = 'https://www.bbc.com/'
 
 driver.get(url)
@@ -44,26 +41,9 @@ for idx, url in enumerate(bbc_hrefs):
         print(header.text)
         for block in data_block:
             print(block.text)
-    previous()
-else:
-    if 'sport' not in url and 'news' not in url:
-        driver.get(url)
-        header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-            (By.XPATH, "//div[@tabindex='-1']")))
-
-        intro = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-            (By.XPATH, "//div[@class='article__intro b-font-family-serif']")))
-
-        body = WebDriverWait(driver, 10).until(EC.visibility_of_any_elements_located((By.XPATH, "//div/div/p")))
-        print(header.text)
-        print(intro.text)
-
-        for p in body:
-            print(p.text)
-
-'''for idx, url in enumerate(bbc_hrefs):
-    try:
-        if 'sport' not in url:
+        previous()
+    else:
+        if 'sport' not in url and 'news' not in url:
             driver.get(url)
             header = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
                 (By.XPATH, "//div[@tabindex='-1']")))
@@ -72,22 +52,18 @@ else:
                 (By.XPATH, "//div[@class='article__intro b-font-family-serif']")))
 
             body = WebDriverWait(driver, 10).until(EC.visibility_of_any_elements_located((By.XPATH, "//div/div/p")))
-
-            counter = counter + 1
             print(header.text)
             print(intro.text)
 
             for p in body:
                 print(p.text)
-    except:
-        pass
 
-print(counter)'''
+
 driver.close()
 driver.quit()
 
 
-class Base(webdriver.Chrome):
+class Base(webdriver.Firefox):
 
     # Add previous
 
