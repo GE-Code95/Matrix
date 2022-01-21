@@ -5,9 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 import pandas as pd
 import itertools
+import json
+import schedule
+from datetime import datetime
 
-
-# TODO - Keep table updated and click show more | Save | Search
+# TODO - Keep table updated | Search
+from base import Base
 
 options = Options()
 options.headless = True
@@ -26,14 +29,13 @@ table_headers = WebDriverWait(driver, 10).until(
 # Put headers names into a list
 columns = list(map(lambda name: name.text, table_headers))
 
-
-'''while True:
+# Click on show more until button is gone
+while True:
     try:
-        item = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH, "//button[@id='next']")))
-        driver.execute_script("arguments[0].click();", item)
-
-    except Exception:break'''
-
+        WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@id='next']"))).click()
+    except:
+        break
 
 # Get the table rows
 table = WebDriverWait(driver, 10).until(
@@ -54,5 +56,29 @@ flights_json = df_flights.to_json()
 
 print(flights_json)
 
+
+def save_json(json_file):
+    count = 0
+    with open(f'C:/Users/Gil/PycharmProjects/Matrix/{count + 1}IAA.json', "w+") as file:
+        json.dump(json_file, file)
+
+
+def search(expression):
+    pass
+
+
+def main():
+    save_json(flights_json)
+
+
+schedule.every(1).minute.do(lambda x: print(x))
+
+if __name__ == '__main__':
+    main()
+
 driver.close()
 driver.quit()
+
+class IAA(Base):
+    def __init__(self):
+        super().__init__()

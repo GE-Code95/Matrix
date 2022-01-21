@@ -58,7 +58,6 @@ for idx, url in enumerate(bbc_hrefs):
             for p in body:
                 print(p.text)
 
-
 driver.close()
 driver.quit()
 
@@ -70,11 +69,20 @@ class Base(webdriver.Firefox):
     def __init__(self, driver_path="C:/Program Files (x86)/chromedriver.exe", teardown=False):
         self.teardown = teardown
         self.driver_path = driver_path
-        # os.environ['PATH'] += self.driver_path
         super(Base, self).__init__()
 
-    def access_page(self, url):
+    @staticmethod
+    def previous():
+        driver.execute_script("window.history.go(-1)")
+
+    def get_page(self, url):
         self.get(url)
+
+    def get_data(self):
+        pass
+
+    def search(self, expression):
+        pass
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
